@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "cafe S3 template"
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    # Anexe uma política de exclusão que reterá o bucket.
+    DeletionPolicy: Retain
+   
+    Properties:
+      # Configure o bucket para hospedar um site estático com index.html definido como o documento de índice
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+       
+# Para o modelo do AWS CloudFormation, adicione uma saída que forneça o URL do site.      
+Outputs:
+  WebsiteURL:
+    Value: !GetAtt
+      - S3Bucket
+      - WebsiteURL
+    Description: URL for website hosted on S3

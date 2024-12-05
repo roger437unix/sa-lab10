@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: template to start the CloudFormation challenge lab
+
+Resources:
+
+  Cloud9:
+    Type: AWS::Cloud9::EnvironmentEC2
+    Properties:
+      InstanceType: t2.micro
+      Name: Cloud9Instance
+
+  MyRepo:
+    Type: AWS::CodeCommit::Repository
+    Properties:
+      RepositoryName: CFTemplatesRepo
+      RepositoryDescription: Repository for store CloudFormation templates
+      Code:
+        S3:
+          Bucket: !Ref repoBucket
+          Key: m10cLabRepo.zip
+
+  repoBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
