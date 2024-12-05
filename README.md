@@ -20,6 +20,83 @@ C
 
 ------------------------------------------------------------------------------
 
+
+
+touch S3.yaml
+
+=> Editar o arquivo
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "cafe S3 template"
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+
+
+=> No terminal do Bash, execute estas duas linhas de código:
+
+aws configure get region
+aws cloudformation create-stack --stack-name CreateBucket --template-body file://S3.yaml
+
+{
+    "StackId": "arn:aws:cloudformation:us-east-1:811793693373:stack/CreateBucket/53955320-b269-11ef-bd8a-0e7c9793a759"
+}
+
+
+=> 17.
+
+File: S3.yaml
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "cafe S3 template"
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    # Anexe uma política de exclusão que reterá o bucket.
+    DeletionPolicy: Retain
+   
+    Properties:
+      # Configure o bucket para hospedar um site estático com index.html definido como o documento de índice
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+       
+# Para o modelo do AWS CloudFormation, adicione uma saída que forneça o URL do site.      
+Outputs:
+  WebsiteURL:
+    Value: !GetAtt
+      - S3Bucket
+      - WebsiteURL
+    Description: URL for website hosted on S3
+
+
+=> 20.
+
+cd ../
+aws cloudformation validate-template --template-body file://S3.yaml
+
+{
+    "Parameters": [],
+    "Description": "cafe S3 template"
+}
+
+
+=> 21.
+
+aws cloudformation update-stack --stack-name CreateBucket --template-body file://S3.yaml
+{
+    "StackId": "arn:aws:cloudformation:us-east-1:811793693373:stack/CreateBucket/53955320-b269-11ef-bd8a-0e7c9793a759"
+}
+
+
+
+
+-----------------------------------------------------------------------------
+
+
+
 # cafe-app.yaml
 
 
